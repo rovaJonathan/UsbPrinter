@@ -15,7 +15,25 @@
                 <param name="android-package" value="cordova.plugin.usbprinter.UsbPrinter" />
             </feature>
         </config-file>
-        <config-file parent="/*" target="AndroidManifest.xml"/>
+
+        <config-file parent="/manifest" target="AndroidManifest.xml">
+            <supports-screens android:anyDensity="true"/>
+            <uses-feature android:name="android.hardware.usb.accessory"/>
+            <uses-feature android:name="android.hardware.usb.host"/>
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+        </cofing-file>
+
+        <config-file parent="/manifest/application" target="AndroidManifest.xml">
+            <uses-library android:name="com.android.future.usb.accessory"/>
+            <meta-data android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
+            android:resource="@xml/device_filter"/>
+        </cofing-file>
+
+        <config-file parent="/manifest/application/activity" target="AndroidManifest.xml">
+            <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"/>
+            <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"/>
+        </cofing-file>
+        
         <source-file src="src/android/UsbPrinter.java" target-dir="src/cordova/plugin/usbprinter/UsbPrinter" />
     </platform>
     
