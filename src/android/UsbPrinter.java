@@ -7,10 +7,35 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.hardware.usb.UsbConstants;
+import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbDeviceConnection;
+import android.hardware.usb.UsbEndpoint;
+import android.hardware.usb.UsbInterface;
+import android.hardware.usb.UsbManager;
+import android.os.Build;
+import android.widget.Toast;
+
+import java.util.HashMap;
+import java.util.Iterator;
+
 /**
  * This class echoes a string called from JavaScript.
  */
 public class UsbPrinter extends CordovaPlugin {
+
+    private UsbManager mUsbManager;
+    private UsbDevice mDevice;
+    private UsbDeviceConnection mConnection;
+    private UsbInterface mInterface;
+    private UsbEndpoint mEndPoint;
+    private PendingIntent mPermissionIntent;
+    private static final String ACTION_USB_PERMISSION = "cordova.plugin.usbprinter.USB_PERMISSION";
+    private static Boolean forceCLaim = true;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -53,4 +78,7 @@ public class UsbPrinter extends CordovaPlugin {
             callback.error("Please don't pass null value");
         }
     }
+
+    
+
 }
