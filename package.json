@@ -1,0 +1,16 @@
+{
+  "name": "usbprinter",
+  "version": "1.0.0",
+  "description": "This is a cordova plugin for an usb printer thermal  ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "usb",
+    "printer",
+    "ionic"
+  ],
+  "author": "Jonathan Randrianandrasana",
+  "license": "ISC"
+}
