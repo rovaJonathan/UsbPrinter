@@ -27,7 +27,7 @@
             <uses-library android:name="com.android.future.usb.accessory"/>
             <meta-data android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
             android:resource="@xml/device_filter"/>
-        </cofing-file>
+        </config-file>
 
         <config-file parent="/manifest/application/activity" target="AndroidManifest.xml">
             <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"/>
