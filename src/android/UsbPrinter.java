@@ -115,7 +115,7 @@ public class UsbPrinter extends CordovaPlugin {
     };
 
     private void scanDevices(JSONArray args, CallbackContext callback){
-        mUsbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
+        mUsbManager = (UsbManager) passedContext.getSystemService(Context.USB_SERVICE);
         mDeviceList = mUsbManager.getDeviceList();
 
         if (mDeviceList.size() > 0) {
@@ -158,7 +158,6 @@ public class UsbPrinter extends CordovaPlugin {
     private void print(JSONArray args, CallbackContext callback) {
 
         final String test = args.getJSONObject(0).getString("msg") + "\n\n\n\n\n\n";
-        testBytes = test.getBytes();
 
         if (mInterface == null) {
             callback.error("INTERFACE IS NULL");            
@@ -175,7 +174,7 @@ public class UsbPrinter extends CordovaPlugin {
                 public void run() {
 
                     byte[] cut_paper = {0x1D, 0x56, 0x01};
-                    mConnection.bulkTransfer(mEndPoint, testBytes, testBytes.length, 0);
+                    mConnection.bulkTransfer(mEndPoint, test.getBytes(), test.getBytes().length, 0);
                     mConnection.bulkTransfer(mEndPoint, cut_paper, cut_paper.length, 0);
                 }
             });

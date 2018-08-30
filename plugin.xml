@@ -21,6 +21,7 @@
             <uses-feature android:name="android.hardware.usb.accessory"/>
             <uses-feature android:name="android.hardware.usb.host"/>
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+            <uses-permission android:name="android.permission.USB_PERMISSION" />
         </config-file>
 
         <config-file parent="/manifest/application" target="AndroidManifest.xml">
