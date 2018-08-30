@@ -118,7 +118,6 @@ public class UsbPrinter extends CordovaPlugin {
     };
 
     public void createConn(Context context) {
-        context = this.cordova.getActivity().getApplicationContext();
         mUsbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
         final String ACTION_USB_PERMISSION =
                 "cordova.plugin.usbprinter.USB_PERMISSION";
