@@ -39,7 +39,13 @@ public class UsbPrinter extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if(action.equals("add")){
+        if(action.equals("scanDevices")){
+            this.scanDevices(args, callback);
+            return true;
+        }else if(action.equals("print")){
+            this.print(args, callback);
+            return true;
+        }else if(action.equals("add")){
             this.add(args, callbackContext);
             return true;
         }
