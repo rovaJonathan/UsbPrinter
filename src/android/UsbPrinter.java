@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
@@ -37,13 +38,16 @@ public class UsbPrinter extends CordovaPlugin {
     private static final String ACTION_USB_PERMISSION = "cordova.plugin.usbprinter.USB_PERMISSION";
     private static Boolean forceCLaim = true;
 
+    HashMap<String, UsbDevice> mDeviceList;
+    Iterator<UsbDevice> mDeviceIterator;
+
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if(action.equals("scanDevices")){
-            this.scanDevices(args, callback);
+            this.scanDevices(args, callbackContext);
             return true;
         }else if(action.equals("print")){
-            this.print(args, callback);
+            this.print(args, callbackContext);
             return true;
         }else if(action.equals("add")){
             this.add(args, callbackContext);
@@ -104,7 +108,6 @@ public class UsbPrinter extends CordovaPlugin {
                         }
                     } else {
                         //Log.d("SUB", "permission denied for device " + device);
-                        Toast.makeText(context, "PERMISSION DENIED FOR THIS DEVICE", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -117,8 +120,6 @@ public class UsbPrinter extends CordovaPlugin {
 
         if (mDeviceList.size() > 0) {
             mDeviceIterator = mDeviceList.values().iterator();
-
-            Toast.makeText(this, "Device List Size: " + String.valueOf(mDeviceList.size()), Toast.LENGTH_SHORT).show();
 
             String usbDevice = "";
             while (mDeviceIterator.hasNext()) {
@@ -134,15 +135,13 @@ public class UsbPrinter extends CordovaPlugin {
                             "DeviceSubClass: " + usbDevice1.getDeviceSubclass() + "\n" +
                             "VendorID: " + usbDevice1.getVendorId() + "\n" +
                             "ProductID: " + usbDevice1.getProductId() + "\n";
+
+                            callback.success(usbDevice);
                 }
 
                 int interfaceCount = usbDevice1.getInterfaceCount();
-                Toast.makeText(this, "INTERFACE COUNT: " + String.valueOf(interfaceCount), Toast.LENGTH_SHORT).show();
 
                 mDevice = usbDevice1;
-
-                Toast.makeText(this, "Device is attached", Toast.LENGTH_SHORT).show();
-                callback.success(usbDevice);
             }
 
             mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
@@ -151,7 +150,6 @@ public class UsbPrinter extends CordovaPlugin {
 
             mUsbManager.requestPermission(mDevice, mPermissionIntent);
         } else {
-            Toast.makeText(this, "Please attach printer via USB", Toast.LENGTH_SHORT).show();
             callback.error("Please attach printer via USB");
         }
 
@@ -163,13 +161,10 @@ public class UsbPrinter extends CordovaPlugin {
         testBytes = test.getBytes();
 
         if (mInterface == null) {
-            Toast.makeText(this, "INTERFACE IS NULL", Toast.LENGTH_SHORT).show();
             callback.error("INTERFACE IS NULL");            
         } else if (mConnection == null) {
-            Toast.makeText(this, "CONNECTION IS NULL", Toast.LENGTH_SHORT).show();
             callback.error("CONNECTION IS NULL");    
         } else if (forceCLaim == null) {
-            Toast.makeText(this, "FORCE CLAIM IS NULL", Toast.LENGTH_SHORT).show();
             callback.error("FORCE CLAIM IS NULL");
         } else {
 
