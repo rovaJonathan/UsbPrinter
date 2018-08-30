@@ -21,7 +21,7 @@
             <uses-feature android:name="android.hardware.usb.accessory"/>
             <uses-feature android:name="android.hardware.usb.host"/>
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-        </cofing-file>
+        </config-file>
 
         <config-file parent="/manifest/application" target="AndroidManifest.xml">
             <uses-library android:name="com.android.future.usb.accessory"/>
@@ -32,7 +32,7 @@
         <config-file parent="/manifest/application/activity" target="AndroidManifest.xml">
             <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"/>
             <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"/>
-        </cofing-file>
+        </config-file>
         
         <source-file src="src/android/UsbPrinter.java" target-dir="src/cordova/plugin/usbprinter/UsbPrinter" />
     </platform>
