@@ -29,11 +29,9 @@
             android:resource="@xml/device_filter"/>
         </config-file>
 
-        <config-file parent="/manifest/application/activity" target="AndroidManifest.xml">
-            <intent-filter>
+        <config-file parent="/manifest/application/activity/intent-filter" target="AndroidManifest.xml">
                 <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"/>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"/>
-            </intent-filter>
         </config-file>
         
         <source-file src="src/android/UsbPrinter.java" target-dir="src/cordova/plugin/usbprinter/UsbPrinter" />
