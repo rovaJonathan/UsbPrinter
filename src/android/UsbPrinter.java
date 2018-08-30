@@ -2,6 +2,7 @@ package cordova.plugin.usbprinter;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -92,6 +93,7 @@ public class UsbPrinter extends CordovaPlugin {
     final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            context = this.cordova.getActivity().getApplicationContext();
             String action = intent.getAction();
             if (ACTION_USB_PERMISSION.equals(action)) {
                 synchronized (this) {
@@ -107,6 +109,7 @@ public class UsbPrinter extends CordovaPlugin {
                             //setup();
                         }
                     } else {
+                        // mUsbManager.requestPermission(mDevice, mPermissionIntent);
                         //Log.d("SUB", "permission denied for device " + device);
                     }
                 }
@@ -114,8 +117,19 @@ public class UsbPrinter extends CordovaPlugin {
         }
     };
 
+    public void createConn(Context context) {
+        context = this.cordova.getActivity().getApplicationContext();
+        mUsbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
+        final String ACTION_USB_PERMISSION =
+                "cordova.plugin.usbprinter.USB_PERMISSION";
+        mPermissionIntent = PendingIntent.getBroadcast(context, 0, new Intent(ACTION_USB_PERMISSION), 0);
+        IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
+        context.registerReceiver(mUsbReceiver, filter);
+    }
+
     private void scanDevices(JSONArray args, CallbackContext callback){
-        mUsbManager = (UsbManager) passedContext.getSystemService(Context.USB_SERVICE);
+
+        mUsbManager = (UsbManager) this.cordova.getActivity().getApplicationContext().getSystemService(Context.USB_SERVICE);
         mDeviceList = mUsbManager.getDeviceList();
 
         if (mDeviceList.size() > 0) {
@@ -143,10 +157,6 @@ public class UsbPrinter extends CordovaPlugin {
 
                 mDevice = usbDevice1;
             }
-
-            mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
-            IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
-            registerReceiver(mUsbReceiver, filter);
 
             mUsbManager.requestPermission(mDevice, mPermissionIntent);
         } else {
