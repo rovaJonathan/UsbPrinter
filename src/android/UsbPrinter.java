@@ -128,8 +128,11 @@ public class UsbPrinter extends CordovaPlugin {
     }
 
     private void scanDevices(JSONArray args, CallbackContext callback){
+        Context context = this.cordova.getActivity().getApplicationContext();
+        mUsbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
 
-        mUsbManager = (UsbManager) this.cordova.getActivity().getApplicationContext().getSystemService(Context.USB_SERVICE);
+        this.createConn(context);
+
         mDeviceList = mUsbManager.getDeviceList();
 
         if (mDeviceList.size() > 0) {
