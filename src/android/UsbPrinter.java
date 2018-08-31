@@ -99,7 +99,7 @@ public class UsbPrinter extends CordovaPlugin {
 
         mDeviceList = mUsbManager.getDeviceList();
 
-        if (mDeviceList.size() > 0) {
+        try/*if (mDeviceList.size() > 0)*/ {
             mDeviceIterator = mDeviceList.values().iterator();
 
             String usbDevice = "";
@@ -142,12 +142,14 @@ public class UsbPrinter extends CordovaPlugin {
                 }
                         
                 int interfaceCount = usbDevice1.getInterfaceCount();
+                Toast.makeText(context, "INTERFACE COUNT: " + String.valueOf(interfaceCount), Toast.LENGTH_SHORT).show();
                 
                 mDevice = usbDevice1;
+                Toast.makeText(context, "Device is attached", Toast.LENGTH_SHORT).show();
             }
             
             mUsbManager.requestPermission(mDevice, mPermissionIntent);
-        } else {
+        } catch (Exception ex) {
             Toast.makeText(context, "Please attach printer via USB", Toast.LENGTH_SHORT).show();
             callback.error("Please attach printer via USB");
         }
@@ -155,40 +157,41 @@ public class UsbPrinter extends CordovaPlugin {
     }
 
     private void print(JSONArray args, CallbackContext callback) {
-        if(args != null){
-            try{
-                final String test = args.getJSONObject(0).getString("msg") + "\n\n\n\n\n\n";
-                testBytes = test.getBytes();
-            }catch (Exception ex){
-                callback.error("JSON error : " + ex);
+
+        try{
+            final String test = args.getJSONObject(0).getString("msg") + "\n\n\n\n\n\n";
+            testBytes = test.getBytes();
+        }catch (Exception ex){
+            callback.error("JSON error : " + ex);
+        }
+
+        try{
+            if (mInterface == null) {
+                throw new InterfaceNull("INTERFACE IS NULL");           
+            } else if (mConnection == null) {
+                throw new ConnectionNull("INTERFACE IS NULL");               
+            } else if (forceCLaim == null) {
+                throw new ForceClaimNull("INTERFACE IS NULL");           
+            } else {
+    
+                mConnection.claimInterface(mInterface, forceCLaim);
+    
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+    
+                        byte[] cut_paper = {0x1D, 0x56, 0x01};
+                        mConnection.bulkTransfer(mEndPoint, testBytes, testBytes.length, 0);
+                        mConnection.bulkTransfer(mEndPoint, cut_paper, cut_paper.length, 0);
+                    }
+                });
+                thread.run();
+                callback.success("Impression réussie");
             }
-        }else{
-            callback.error("Please don't pass null value");
+        }catch (Exception ex){
+            callback("Error Print : " + ex);
         }
-
-
-        if (mInterface == null) {
-            callback.error("INTERFACE IS NULL");            
-        } else if (mConnection == null) {
-            callback.error("CONNECTION IS NULL");    
-        } else if (forceCLaim == null) {
-            callback.error("FORCE CLAIM IS NULL");
-        } else {
-
-            mConnection.claimInterface(mInterface, forceCLaim);
-
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-
-                    byte[] cut_paper = {0x1D, 0x56, 0x01};
-                    mConnection.bulkTransfer(mEndPoint, testBytes, testBytes.length, 0);
-                    mConnection.bulkTransfer(mEndPoint, cut_paper, cut_paper.length, 0);
-                }
-            });
-            thread.run();
-            callback.success("Impression réussie");
-        }
+        
     }
 
     private String translateDeviceClass(int deviceClass) {
