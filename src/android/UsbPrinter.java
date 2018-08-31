@@ -40,6 +40,8 @@ public class UsbPrinter extends CordovaPlugin {
     HashMap<String, UsbDevice> mDeviceList;
     Iterator<UsbDevice> mDeviceIterator;
 
+    byte[] testBytes;
+
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if(action.equals("scanDevices")){
@@ -165,10 +167,10 @@ public class UsbPrinter extends CordovaPlugin {
     }
 
     private void print(JSONArray args, CallbackContext callback) {
-        final String test = "";
         if(args != null){
             try{
-                test = args.getJSONObject(0).getString("msg") + "\n\n\n\n\n\n";
+                final String test = args.getJSONObject(0).getString("msg") + "\n\n\n\n\n\n";
+                testBytes = test.getBytes();
             }catch (Exception ex){
                 callback.error("JSON error : " + ex);
             }
@@ -192,7 +194,7 @@ public class UsbPrinter extends CordovaPlugin {
                 public void run() {
 
                     byte[] cut_paper = {0x1D, 0x56, 0x01};
-                    mConnection.bulkTransfer(mEndPoint, test.getBytes(), test.getBytes().length, 0);
+                    mConnection.bulkTransfer(mEndPoint, testBytes, testBytes.length, 0);
                     mConnection.bulkTransfer(mEndPoint, cut_paper, cut_paper.length, 0);
                 }
             });
