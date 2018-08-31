@@ -151,15 +151,15 @@ public class UsbPrinter extends CordovaPlugin {
                             "VendorID: " + usbDevice1.getVendorId() + "\n" +
                             "ProductID: " + usbDevice1.getProductId() + "\n";
 
-                            callback.success(usbDevice);
-                }
-
-                int interfaceCount = usbDevice1.getInterfaceCount();
-
-                mDevice = usbDevice1;
-            }
-
-            mUsbManager.requestPermission(mDevice, mPermissionIntent);
+                        }
+                        
+                        int interfaceCount = usbDevice1.getInterfaceCount();
+                        
+                        mDevice = usbDevice1;
+                    }
+                    
+                    mUsbManager.requestPermission(mDevice, mPermissionIntent);
+                    callback.success(usbDevice);
         } else {
             callback.error("Please attach printer via USB");
         }
