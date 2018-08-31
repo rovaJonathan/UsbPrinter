@@ -165,8 +165,16 @@ public class UsbPrinter extends CordovaPlugin {
     }
 
     private void print(JSONArray args, CallbackContext callback) {
+        if(args != null){
+            try{
+                final String test = args.getJSONObject(0).getString("msg") + "\n\n\n\n\n\n";
+            }catch (Exception ex){
+                callback.error("JSON error : " + ex);
+            }
+        }else{
+            callback.error("Please don't pass null value");
+        }
 
-        final String test = args.getJSONObject(0).getString("msg") + "\n\n\n\n\n\n";
 
         if (mInterface == null) {
             callback.error("INTERFACE IS NULL");            
