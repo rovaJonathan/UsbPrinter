@@ -91,7 +91,6 @@ public class UsbPrinter extends CordovaPlugin {
     final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            context = this.cordova.getActivity().getApplicationContext();
             String action = intent.getAction();
             if (ACTION_USB_PERMISSION.equals(action)) {
                 synchronized (this) {
