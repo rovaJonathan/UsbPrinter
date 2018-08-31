@@ -121,7 +121,7 @@ public class UsbPrinter extends CordovaPlugin {
 
                         callback.success(myDevice);
                     }catch (Exception ex){
-                        callback.error("JSON err : " + ex);
+                        callback.error("JSON error : " + ex);
                     }
 
 
@@ -148,6 +148,7 @@ public class UsbPrinter extends CordovaPlugin {
             
             mUsbManager.requestPermission(mDevice, mPermissionIntent);
         } else {
+            Toast.makeText(context, "Please attach printer via USB", Toast.LENGTH_SHORT).show();
             callback.error("Please attach printer via USB");
         }
 
