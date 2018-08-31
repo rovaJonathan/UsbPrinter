@@ -121,7 +121,7 @@ public class UsbPrinter extends CordovaPlugin {
 
                         callback.success(myDevice);
                     }catch (Exception ex){
-                        callback.error(ex);
+                        callback.error("JSON err : " + ex);
                     }
 
 
