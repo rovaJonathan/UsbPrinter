@@ -108,18 +108,24 @@ public class UsbPrinter extends CordovaPlugin {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
                     JSONObject myDevice = new JSONObject();
-                    myDevice.put("DeviceID", usbDevice1.getDeviceId());
-                    myDevice.put("DeviceName", usbDevice1.getDeviceId());
-                    myDevice.put("Protocol", usbDevice1.getDeviceProtocol());
-                    myDevice.put("ProductName", usbDevice1.getProductName());
-                    myDevice.put("ManufacturerName", usbDevice1.getManufacturerName());
-                    myDevice.put("DeviceClass", usbDevice1.getDeviceClass() + " - " + translateDeviceClass(usbDevice1.getDeviceClass()));
-                    myDevice.put("DeviceSubClass", usbDevice1.getDeviceSubclass());
-                    myDevice.put("VendorID", usbDevice1.getVendorId());
-                    myDevice.put("ProductID", usbDevice1.getProductId());
+                    try{
+                        myDevice.put("DeviceID", usbDevice1.getDeviceId());
+                        myDevice.put("DeviceName", usbDevice1.getDeviceId());
+                        myDevice.put("Protocol", usbDevice1.getDeviceProtocol());
+                        myDevice.put("ProductName", usbDevice1.getProductName());
+                        myDevice.put("ManufacturerName", usbDevice1.getManufacturerName());
+                        myDevice.put("DeviceClass", usbDevice1.getDeviceClass() + " - " + translateDeviceClass(usbDevice1.getDeviceClass()));
+                        myDevice.put("DeviceSubClass", usbDevice1.getDeviceSubclass());
+                        myDevice.put("VendorID", usbDevice1.getVendorId());
+                        myDevice.put("ProductID", usbDevice1.getProductId());
+
+                        callback.success(myDevice);
+                    }catch (Exception ex){
+                        callback.error(ex);
+                    }
 
 
-                    callback.success(myDevice);
+
 
 
                     // usbDevice += "\n" +
