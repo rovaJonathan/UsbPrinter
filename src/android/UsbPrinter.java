@@ -19,6 +19,7 @@ import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
 import android.os.Build;
 import android.widget.Toast;
+import jdk.nashorn.api.scripting.JSObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -105,26 +106,41 @@ public class UsbPrinter extends CordovaPlugin {
             while (mDeviceIterator.hasNext()) {
                 UsbDevice usbDevice1 = mDeviceIterator.next();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    usbDevice += "\n" +
-                            "DeviceID: " + usbDevice1.getDeviceId() + "\n" +
-                            "DeviceName: " + usbDevice1.getDeviceName() + "\n" +
-                            "Protocol: " + usbDevice1.getDeviceProtocol() + "\n" +
-                            "Product Name: " + usbDevice1.getProductName() + "\n" +
-                            "Manufacturer Name: " + usbDevice1.getManufacturerName() + "\n" +
-                            "DeviceClass: " + usbDevice1.getDeviceClass() + " - " + translateDeviceClass(usbDevice1.getDeviceClass()) + "\n" +
-                            "DeviceSubClass: " + usbDevice1.getDeviceSubclass() + "\n" +
-                            "VendorID: " + usbDevice1.getVendorId() + "\n" +
-                            "ProductID: " + usbDevice1.getProductId() + "\n";
 
-                        }
+                    JSONObject myDevice = new JSONObject();
+                    myDevice.put("DeviceID", usbDevice1.getDeviceId());
+                    myDevice.put("DeviceName", usbDevice1.getDeviceId());
+                    myDevice.put("Protocol", usbDevice1.getDeviceProtocol());
+                    myDevice.put("ProductName", usbDevice1.getProductName());
+                    myDevice.put("ManufacturerName", usbDevice1.getManufacturerName());
+                    myDevice.put("DeviceClass", usbDevice1.getDeviceClass() + " - " + translateDeviceClass(usbDevice1.getDeviceClass()));
+                    myDevice.put("DeviceSubClass", usbDevice1.getDeviceSubclass());
+                    myDevice.put("VendorID", usbDevice1.getVendorId());
+                    myDevice.put("ProductID", usbDevice1.getProductId());
+
+
+                    callback.success(myDevice);
+
+
+                    // usbDevice += "\n" +
+                    //         "DeviceID: " + usbDevice1.getDeviceId() + "\n" +
+                    //         "DeviceName: " + usbDevice1.getDeviceName() + "\n" +
+                    //         "Protocol: " + usbDevice1.getDeviceProtocol() + "\n" +
+                    //         "Product Name: " + usbDevice1.getProductName() + "\n" +
+                    //         "Manufacturer Name: " + usbDevice1.getManufacturerName() + "\n" +
+                    //         "DeviceClass: " + usbDevice1.getDeviceClass() + " - " + translateDeviceClass(usbDevice1.getDeviceClass()) + "\n" +
+                    //         "DeviceSubClass: " + usbDevice1.getDeviceSubclass() + "\n" +
+                    //         "VendorID: " + usbDevice1.getVendorId() + "\n" +
+                    //         "ProductID: " + usbDevice1.getProductId() + "\n";
+
+                }
                         
-                        int interfaceCount = usbDevice1.getInterfaceCount();
-                        
-                        mDevice = usbDevice1;
-                    }
-                    
-                    mUsbManager.requestPermission(mDevice, mPermissionIntent);
-                    callback.success(usbDevice);
+                int interfaceCount = usbDevice1.getInterfaceCount();
+                
+                mDevice = usbDevice1;
+            }
+            
+            mUsbManager.requestPermission(mDevice, mPermissionIntent);
         } else {
             callback.error("Please attach printer via USB");
         }
