@@ -166,28 +166,23 @@ public class UsbPrinter extends CordovaPlugin {
         }
 
         try{
-            if (mInterface == null) {
-                throw new InterfaceNull("INTERFACE IS NULL");           
-            } else if (mConnection == null) {
-                throw new ConnectionNull("INTERFACE IS NULL");               
-            } else if (forceCLaim == null) {
-                throw new ForceClaimNull("INTERFACE IS NULL");           
-            } else {
-    
-                mConnection.claimInterface(mInterface, forceCLaim);
-    
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-    
-                        byte[] cut_paper = {0x1D, 0x56, 0x01};
-                        mConnection.bulkTransfer(mEndPoint, testBytes, testBytes.length, 0);
-                        mConnection.bulkTransfer(mEndPoint, cut_paper, cut_paper.length, 0);
-                    }
-                });
-                thread.run();
-                callback.success("Impression réussie");
-            }
+
+            connectToMaterial();
+               
+            mConnection.claimInterface(mInterface, forceCLaim);
+
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    byte[] cut_paper = {0x1D, 0x56, 0x01};
+                    mConnection.bulkTransfer(mEndPoint, testBytes, testBytes.length, 0);
+                    mConnection.bulkTransfer(mEndPoint, cut_paper, cut_paper.length, 0);
+                }
+            });
+            thread.run();
+            callback.success("Impression réussie");
+        
         }catch (Exception ex){
             callback("Error Print : " + ex);
         }
@@ -253,6 +248,26 @@ public class UsbPrinter extends CordovaPlugin {
                 return "Unknown USB class!";
         }
     }
+
+    public void connectToMaterial() throws NoMaterialException{
+        if (mInterface == null) {
+            throw new NoMaterialException("INTERFACE IS NULL");           
+        } else if (mConnection == null) {
+            throw new NoMaterialException("CONNECTION IS NULL");               
+        } else if (forceCLaim == null) {
+            throw new NoMaterialException("FORCECLAIM IS NULL");           
+        }
+    }
     
 
+}
+
+public class NoMaterialException extends Exception{
+    public NoMaterialException(){
+        super();
+    }
+
+    public NoMaterialException(String s){
+        super(s);
+    }
 }
