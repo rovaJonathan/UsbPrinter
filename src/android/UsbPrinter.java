@@ -76,6 +76,7 @@ public class UsbPrinter extends CordovaPlugin {
                     } else {
                         // mUsbManager.requestPermission(mDevice, mPermissionIntent);
                         //Log.d("SUB", "permission denied for device " + device);
+                       Toast.makeText(context, "USB permission denied for device " + device, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -99,7 +100,7 @@ public class UsbPrinter extends CordovaPlugin {
 
         mDeviceList = mUsbManager.getDeviceList();
 
-        try/*if (mDeviceList.size() > 0)*/ {
+        try{
             mDeviceIterator = mDeviceList.values().iterator();
 
             String usbDevice = "";
@@ -151,7 +152,7 @@ public class UsbPrinter extends CordovaPlugin {
             mUsbManager.requestPermission(mDevice, mPermissionIntent);
         } catch (Exception ex) {
             Toast.makeText(context, "Please attach printer via USB", Toast.LENGTH_SHORT).show();
-            callback.error("Please attach printer via USB");
+            callback.error("Please attach printer via USB : " + ex);
         }
 
     }
@@ -185,12 +186,12 @@ public class UsbPrinter extends CordovaPlugin {
                     byte[] cut_paper = {0x1D, 0x56, 0x01};
                     mConnection.bulkTransfer(mEndPoint, testBytes, testBytes.length, 0);
                     mConnection.bulkTransfer(mEndPoint, cut_paper, cut_paper.length, 0);
-                }
-            });
-            thread.run();
-            callback.success("Impression réussie");
+                    }
+                });
+                thread.run();
+                callback.success("Impression réussie");
         
-        }
+            }
         }catch (Exception ex){
             callback.error("Error Print : " + ex);
         }
