@@ -167,11 +167,18 @@ public class UsbPrinter extends CordovaPlugin {
 
         try{
 
-            connectToMaterial();
-               
-            mConnection.claimInterface(mInterface, forceCLaim);
+            if (mInterface == null) {
+                callback.error("INTERFACE IS NULL");           
+            } else if (mConnection == null) {
+                callback.error("CONNECTION IS NULL");               
+            } else if (forceCLaim == null) {
+                callback.error("FORCECLAIM IS NULL");           
+            }else{
 
-            Thread thread = new Thread(new Runnable() {
+                
+                mConnection.claimInterface(mInterface, forceCLaim);
+                
+                Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
 
@@ -183,8 +190,9 @@ public class UsbPrinter extends CordovaPlugin {
             thread.run();
             callback.success("Impression réussie");
         
+        }
         }catch (Exception ex){
-            callback("Error Print : " + ex);
+            callback.error("Error Print : " + ex);
         }
         
     }
@@ -248,26 +256,5 @@ public class UsbPrinter extends CordovaPlugin {
                 return "Unknown USB class!";
         }
     }
-
-    public void connectToMaterial() throws NoMaterialException{
-        if (mInterface == null) {
-            throw new NoMaterialException("INTERFACE IS NULL");           
-        } else if (mConnection == null) {
-            throw new NoMaterialException("CONNECTION IS NULL");               
-        } else if (forceCLaim == null) {
-            throw new NoMaterialException("FORCECLAIM IS NULL");           
-        }
-    }
-    
-
 }
 
-public class NoMaterialException extends Exception{
-    public NoMaterialException(){
-        super();
-    }
-
-    public NoMaterialException(String s){
-        super(s);
-    }
-}
