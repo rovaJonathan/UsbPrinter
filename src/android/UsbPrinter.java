@@ -109,15 +109,15 @@ public class UsbPrinter extends CordovaPlugin {
 
                     JSONObject myDevice = new JSONObject();
                     try{
-                        myDevice.put("DeviceID", usbDevice1.getDeviceId());
-                        myDevice.put("DeviceName", usbDevice1.getDeviceId());
-                        myDevice.put("Protocol", usbDevice1.getDeviceProtocol());
-                        myDevice.put("ProductName", usbDevice1.getProductName());
-                        myDevice.put("ManufacturerName", usbDevice1.getManufacturerName());
-                        myDevice.put("DeviceClass", usbDevice1.getDeviceClass() + " - " + translateDeviceClass(usbDevice1.getDeviceClass()));
-                        myDevice.put("DeviceSubClass", usbDevice1.getDeviceSubclass());
-                        myDevice.put("VendorID", usbDevice1.getVendorId());
-                        myDevice.put("ProductID", usbDevice1.getProductId());
+                        myDevice.put("deviceID", usbDevice1.getDeviceId());
+                        myDevice.put("deviceName", usbDevice1.getDeviceId());
+                        myDevice.put("protocol", usbDevice1.getDeviceProtocol());
+                        myDevice.put("productName", usbDevice1.getProductName());
+                        myDevice.put("manufacturerName", usbDevice1.getManufacturerName());
+                        myDevice.put("deviceClass", usbDevice1.getDeviceClass() + " - " + translateDeviceClass(usbDevice1.getDeviceClass()));
+                        myDevice.put("deviceSubClass", usbDevice1.getDeviceSubclass());
+                        myDevice.put("vendorID", usbDevice1.getVendorId());
+                        myDevice.put("productID", usbDevice1.getProductId());
 
                         callback.success(myDevice);
                     }catch (Exception ex){
